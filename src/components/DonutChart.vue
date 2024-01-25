@@ -30,7 +30,7 @@ const options = {
             }
         }
     }
-}
+} as any
 </script>
 
 <template>

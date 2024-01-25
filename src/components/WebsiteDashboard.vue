@@ -61,13 +61,13 @@ const originChartData = computed(() => {
                     <template #icon>
                         <img :src="eyeIcon" class="icon" alt="eye icon"/>
                     </template>
-                    <MetricContent :title="websiteAnalytics.viewCount" label="vues"></MetricContent>
+                    <MetricContent :title="websiteAnalytics.viewCount.toString()" label="vues"></MetricContent>
                 </MetricCard>
                 <MetricCard>
                     <template #icon>
                         <img :src="userIcon" class="icon" alt="user icon"/>
                     </template>
-                    <MetricContent :title="websiteAnalytics.sessionCount" label="sessions"></MetricContent>
+                    <MetricContent :title="websiteAnalytics.sessionCount.toString()" label="sessions"></MetricContent>
                 </MetricCard>
                 <MetricCard>
                     <template #icon>

@@ -29,7 +29,7 @@ const getUserAnalytics = () => {
     dateRange.value[1].setHours(23,59,59,59)
     const startTime = Math.floor(dateRange.value[0].getTime() / 1000)
     const endTime = Math.floor(dateRange.value[1].getTime() / 1000)
-    fetch(`http://localhost:8080/userAnalytics?start_time=${startTime}&end_time=${endTime}`, {
+    fetch(`${import.meta.env.VITE_API_URL}/userAnalytics?start_time=${startTime}&end_time=${endTime}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
