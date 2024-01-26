@@ -6,7 +6,6 @@ import {AnalyticsData} from "@/types/analytics.ts";
 import WebsiteDashboard from "@/components/WebsiteDashboard.vue";
 import TextInput from "@/components/TextInput.vue";
 import BrutalBtn from "@/components/BrutalBtn.vue";
-import BrutalDropdown from "@/components/BrutalDropdown.vue";
 
 let apiKey = window.localStorage.getItem('apiKey') || ''
 
@@ -14,17 +13,20 @@ const sevenDaysAgo = new Date();
 sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
 const dateRange = ref([sevenDaysAgo, new Date()]);
-
 const userAnalytics = ref<AnalyticsData[]>([])
-
 const selectedWebsiteId = ref("")
+const loading = ref(false)
 
 const selectedWebsiteAnalytics = computed(() => {
     return userAnalytics.value.find((analytics: AnalyticsData) => analytics.website.websiteID == selectedWebsiteId.value)
 })
 
+const websites = computed(() => {
+    return userAnalytics.value.map(website => website.website)
+})
+
 const getUserAnalytics = () => {
-    console.log('clicked', apiKey)
+    loading.value = true;
     dateRange.value[0].setHours(0,0,0,0)
     dateRange.value[1].setHours(23,59,59,59)
     const startTime = Math.floor(dateRange.value[0].getTime() / 1000)
@@ -41,6 +43,7 @@ const getUserAnalytics = () => {
             userAnalytics.value = data
             window.localStorage.setItem('apiKey', apiKey)
             selectedWebsiteId.value = data[0].website.websiteID
+            loading.value = false;
         })
         .catch(err => console.log(err))
 }
@@ -50,14 +53,12 @@ const getUserAnalytics = () => {
     <div class="dashboard">
         <div class="inputs">
             <TextInput id="api-key" name="api-key" type="password" placeholder="API key" v-model="apiKey" />
-            <Datepicker class="datepicker" v-model="dateRange" :max-date="new Date()" :enable-time-picker="false" range auto-apply prevent-min-max-navigation />
+            <Datepicker class="datepicker" v-model="dateRange" @update:model-value="getUserAnalytics" :max-date="new Date()" :enable-time-picker="false" range auto-apply prevent-min-max-navigation />
             <BrutalBtn @click="getUserAnalytics">Get analytics</BrutalBtn>
-            <BrutalDropdown id="website-selector" v-if="userAnalytics.length > 0" v-model="selectedWebsiteId"
-                            :options="userAnalytics.map(website => {return {label: website.website.websiteName, value: website.website.websiteID}})" />
         </div>
 
 
-        <WebsiteDashboard v-if="selectedWebsiteAnalytics" :website-analytics="selectedWebsiteAnalytics" />
+        <WebsiteDashboard v-if="selectedWebsiteId || loading" :analytics="selectedWebsiteAnalytics" :websites="websites" :loading="loading" v-model="selectedWebsiteId"/>
     </div>
 </template>
 
@@ -82,10 +83,6 @@ const getUserAnalytics = () => {
     margin: 1rem;
     gap: 2rem;
     width: fit-content;
-
-    #website-selector {
-        margin: auto 0;
-    }
 }
 
 .datepicker {
@@ -94,6 +91,8 @@ const getUserAnalytics = () => {
     border-radius: 0;
     box-shadow: $brutal-shadow;
     --dp-background-color: #e9c46a;
+    --dp-border-radius: 0;
+    --dp-border-color: black;
     --dp-icon-color: black;
     --dp-text-color: black;
 }
