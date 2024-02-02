@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import {AnalyticsData, WebsiteInfo} from "../types/analytics.ts";
 import MetricCard from "./MetricCard.vue";
-import eyeIcon from "@/assets/images/icons/eye.svg";
-import userIcon from "@/assets/images/icons/user.svg";
-import timeIcon from "@/assets/images/icons/time.svg";
-import branchingIcon from "@/assets/images/icons/branching.svg";
-import deviceIcon from "@/assets/images/icons/device.svg";
-import MetricContent from "@/components/MetricContent.vue";
+import EyeIcon from "@/assets/images/icons/eye.svg";
+import UserIcon from "@/assets/images/icons/user.svg";
+import TimeIcon from "@/assets/images/icons/time.svg";
+import BranchingIcon from "@/assets/images/icons/branching.svg";
+import DeviceIcon from "@/assets/images/icons/device.svg";
+import NumberMetric from "@/components/NumberMetric.vue";
 import DonutChart from "@/components/DonutChart.vue";
 import {computed} from "vue";
 import BrutalDropdown from "@/components/BrutalDropdown.vue";
 import Loader from "@/components/Loader.vue";
+import TableMetric from "@/components/TableMetric.vue";
 
 const props = defineProps<{
     analytics: AnalyticsData | undefined,
@@ -45,7 +46,6 @@ const deviceChartData = computed(() => {
     }
 })
 
-
 const originChartData = computed(() => {
     if (!props.analytics) return {}
     return {
@@ -65,6 +65,7 @@ const originChartData = computed(() => {
         ]
     }
 })
+
 </script>
 
 <template>
@@ -72,42 +73,51 @@ const originChartData = computed(() => {
         <BrutalDropdown id="website-selector" v-if="websites?.length > 0" :model-value="modelValue"
                         :options="websites.map(website => {return {label: website.websiteName, value: website.websiteID}})" @update:modelValue="handleWebsiteChange" />
         <div class="content">
-            <div class="metrics numbers">
-                <MetricCard>
-                    <template #icon>
-                        <img :src="eyeIcon" class="icon" alt="eye icon"/>
-                    </template>
-                    <MetricContent :title="analytics.viewCount.toString()" label="vues"></MetricContent>
-                </MetricCard>
-                <MetricCard>
-                    <template #icon>
-                        <img :src="userIcon" class="icon" alt="user icon"/>
-                    </template>
-                    <MetricContent :title="analytics.sessionCount.toString()" label="sessions"></MetricContent>
-                </MetricCard>
-                <MetricCard>
-                    <template #icon>
-                        <img :src="timeIcon" class="icon" alt="time icon"/>
-                    </template>
-                    <MetricContent :title="analytics.sessionTime.mean + 'min'"
-                                   label="Temps de session"></MetricContent>
-                </MetricCard>
-            </div>
             <div class="metrics charts">
                 <MetricCard>
                     <template #icon>
-                        <img :src="deviceIcon" class="icon" alt="device icon"/>
+                        <DeviceIcon class="icon" alt="device icon"/>
                     </template>
                     <DonutChart :data="deviceChartData"></DonutChart>
                 </MetricCard>
                 <MetricCard>
                     <template #icon>
-                        <img :src="branchingIcon" class="icon" alt="branching path icon"/>
+                        <BranchingIcon class="icon" alt="branching path icon"/>
                     </template>
                     <DonutChart :data="originChartData"/>
                 </MetricCard>
             </div>
-
+            <div class="metrics numbers">
+                <div class="numbers-row">
+                    <MetricCard>
+                        <template #icon>
+                            <EyeIcon class="icon" alt="eye icon"/>
+                        </template>
+                        <NumberMetric :title="analytics.viewCount.toString()" label="vues"></NumberMetric>
+                    </MetricCard>
+                    <MetricCard>
+                        <template #icon>
+                            <UserIcon class="icon" alt="user icon"/>
+                        </template>
+                        <NumberMetric :title="analytics.sessionCount.toString()" label="sessions"></NumberMetric>
+                    </MetricCard>
+                    <MetricCard>
+                        <template #icon>
+                            <TimeIcon class="icon" alt="time icon"/>
+                        </template>
+                        <NumberMetric :title="analytics.sessionTime.mean + 'min'"
+                                      label="temps de session"></NumberMetric>
+                    </MetricCard>
+                </div>
+                <div class="numbers-row">
+                    <MetricCard  v-if="Object.keys(analytics.customEvents)?.length > 0">
+                        <TableMetric title="Custom events" :rows="analytics.customEvents"></TableMetric>
+                    </MetricCard>
+                    <MetricCard v-if="Object.keys(analytics.pagesViews)?.length > 1">
+                        <TableMetric title="Views per page" :rows="analytics.pagesViews"></TableMetric>
+                    </MetricCard>
+                </div>
+            </div>
         </div>
 
     </section>
@@ -118,23 +128,20 @@ const originChartData = computed(() => {
 
 <style lang="scss" scoped>
 .website-dashboard {
-    background-color: white;
-    border-radius: 0.5rem;
     box-shadow: 0 0 0.5rem rgba(155, 155, 155, 0.5);
-    padding: 1rem;
-    margin: 1rem;
+    padding: 0 1rem 2rem 1rem;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     gap: 1rem;
     font-size: 2rem;
-    height: 90vh;
+    min-height: 100vh;
 
     @media (max-width: $mobile-breakpoint) {
-        width: 100%;
         margin: 0;
         border-radius: 0;
         height: fit-content;
+        padding: 3rem 1rem 2rem 1rem;
     }
 }
 
@@ -142,52 +149,66 @@ const originChartData = computed(() => {
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 .content {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-auto-rows: minmax(100px, auto);
     flex-direction: column;
     gap: 2rem;
     justify-content: space-evenly;
-    align-items: center;
-    flex-grow: 1;
 
-
+    @media (max-width: $tablet-breakpoint) {
+        grid-template-columns: 1fr;
+        grid-auto-rows: minmax(100px, auto);
+        gap: 1rem;
+    }
 }
 
 .metrics {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
     gap: 2rem;
 
     @media (max-width: $mobile-breakpoint) {
         flex-direction: column;
         width: 100%;
-        & > * {
-            width: 100%;
-            max-width: 100%;
-            justify-content: center
-        }
     }
 }
 
+.numbers {
+    flex-direction: column;
+}
+
+.numbers-row {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+
+}
+
 .charts {
-    flex-wrap: nowrap;
     & > * {
         flex-shrink: 1;
+        max-width: 90dvw;
+    }
+
+    @media (max-width: $tablet-breakpoint) {
+        grid-row-start: 2;
+
     }
 }
 
 .icon {
     width: 4rem;
     height: 4rem;
-    color: white;
+    color: black;
+    flex-shrink: 0;
 }
 
 #website-selector {
-    margin: 1rem auto 2rem 2rem;
+    margin: 1rem 2rem 2rem auto;
     padding: 1rem;
     font-size: 2rem;
 
