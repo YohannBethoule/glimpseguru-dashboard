@@ -121,7 +121,7 @@ const originChartData = computed(() => {
         </div>
 
     </section>
-    <section class="website-dashboard loader-container" v-else>
+    <section class="website-dashboard loader-container" v-else-if="loading">
         <Loader></Loader>
     </section>
 </template>
