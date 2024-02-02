@@ -6,6 +6,7 @@ export interface AnalyticsData {
     deviceType: DeviceType;
     sourceType: SourceType;
     pagesViews: PagesViews;
+    customEvents: CustomEvents;
 }
 
 export interface WebsiteInfo {
@@ -33,5 +34,9 @@ export interface SourceType {
 }
 
 export interface PagesViews {
+    [key: string]: number;
+}
+
+export interface CustomEvents {
     [key: string]: number;
 }
