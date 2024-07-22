@@ -12,6 +12,7 @@ import {computed} from "vue";
 import BrutalDropdown from "@/components/BrutalDropdown.vue";
 import Loader from "@/components/Loader.vue";
 import TableMetric from "@/components/TableMetric.vue";
+import LineChart from "@/components/LineChart.vue";
 
 const props = defineProps<{
     analytics: AnalyticsData | undefined,
@@ -93,7 +94,7 @@ const originChartData = computed(() => {
                         <template #icon>
                             <EyeIcon class="icon" alt="eye icon"/>
                         </template>
-                        <NumberMetric :title="analytics.viewCount.toString()" label="vues"></NumberMetric>
+                        <NumberMetric :title="analytics.viewCount.toString()" label="views"></NumberMetric>
                     </MetricCard>
                     <MetricCard>
                         <template #icon>
@@ -106,7 +107,7 @@ const originChartData = computed(() => {
                             <TimeIcon class="icon" alt="time icon"/>
                         </template>
                         <NumberMetric :title="analytics.sessionTime.mean + 'min'"
-                                      label="temps de session"></NumberMetric>
+                                      label="session time"></NumberMetric>
                     </MetricCard>
                 </div>
                 <div class="numbers-row">
@@ -116,10 +117,12 @@ const originChartData = computed(() => {
                     <MetricCard v-if="Object.keys(analytics.pagesViews)?.length > 1">
                         <TableMetric title="Views per page" :rows="analytics.pagesViews"></TableMetric>
                     </MetricCard>
+                    <MetricCard v-if="Object.keys(analytics.viewsHistogram)?.length > 0">
+                        <LineChart :data="analytics.viewsHistogram" />
+                    </MetricCard>
                 </div>
             </div>
         </div>
-
     </section>
     <section class="website-dashboard loader-container" v-else-if="loading">
         <Loader></Loader>

@@ -7,6 +7,7 @@ export interface AnalyticsData {
     sourceType: SourceType;
     pagesViews: PagesViews;
     customEvents: CustomEvents;
+    viewsHistogram: EventHistogram;
 }
 
 export interface WebsiteInfo {
@@ -39,4 +40,8 @@ export interface PagesViews {
 
 export interface CustomEvents {
     [key: string]: number;
+}
+
+interface EventHistogram {
+    [date: string]: number;
 }
