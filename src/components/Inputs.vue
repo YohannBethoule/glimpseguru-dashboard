@@ -63,7 +63,7 @@ const getUserAnalytics = (event: SubmitEvent) => {
             <a href="#" class="close" @click="isOpen = false">x</a>
             <form class="inputs">
                 <TextInput id="api-key" name="api-key" type="password" placeholder="API key" v-model="apiKey" required />
-                <Datepicker class="datepicker" v-model="dateRange" @update:model-value="getUserAnalytics" :max-date="new Date()" :enable-time-picker="false" range auto-apply prevent-min-max-navigation required />
+                <Datepicker class="datepicker" v-model="dateRange" :max-date="new Date()" :enable-time-picker="false" range auto-apply prevent-min-max-navigation required />
                 <BrutalBtn class="submit" type="submit" href="#" @click="getUserAnalytics">Get analytics</BrutalBtn>
             </form>
         </aside>

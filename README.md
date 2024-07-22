@@ -1,18 +1,57 @@
-# Vue 3 + TypeScript + Vite
+# GlimpseGuru Dashboard
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Welcome to the **GlimpseGuru Dashboard**! This project is a front-end dashboard application designed for a lightweight and straightforward analytics solution for websites. It is built using Vue 3, Vite, and Chart.js to provide a responsive and interactive user experience.
 
-## Recommended IDE Setup
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Features
 
-## Type Support For `.vue` Imports in TS
+- **Real-time Data Visualization**: Utilize Chart.js to create dynamic charts and graphs.
+- **Responsive Design**: Optimized for various screen sizes to ensure accessibility on all devices.
+- **Lightweight**: Built with performance in mind using Vue 3 and Vite.
+- **Easy to Integrate**: Simple setup process to get your analytics up and running quickly.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## Installation
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+To get started with GlimpseGuru Dashboard, follow these steps:
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+1. **Clone the repository:**
+
+    ```bash
+    git clone https://github.com/YohannBethoule/glimpseguru-dashboard
+    cd glimpseguru-dashboard
+    ```
+
+2. **Install dependencies:**
+
+    ```bash
+    npm install
+    ```
+
+3. **Setup .env:**
+
+   Create and setup a `.env` file in the root directory based on the `.env.example` file.
+
+4. **Start the development server:**
+
+    ```bash
+    npm run dev
+    ```
+
+   This will start the Vite development server, and you can view the dashboard at `http://localhost:3000`.
+
+
+## Contributing
+
+We welcome contributions from the community! If you'd like to contribute, please follow these steps:
+
+1. **Fork the repository.**
+2. **Create a new branch:**
+3. **Create a pull request.**
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+Thank you for using GlimpseGuru Dashboard! If you have any questions or feedback, please feel free to open an issue or contact us. Happy analyzing!
